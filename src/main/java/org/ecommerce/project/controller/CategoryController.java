@@ -1,6 +1,7 @@
 package org.ecommerce.project.controller;
 
 import jakarta.validation.Valid;
+import org.ecommerce.project.config.AppConstant;
 import org.ecommerce.project.payload.CategoryDTO;
 import org.ecommerce.project.payload.CategoryResponse;
 import org.ecommerce.project.service.CategoryService;
@@ -16,9 +17,19 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @GetMapping("/echo")
+    public ResponseEntity<String> echo(@RequestParam(name = "message", required = false) String message){
+        return new ResponseEntity<>("message : " + message, HttpStatus.OK);
+    }
+
     @GetMapping("/public/categories")
-    public ResponseEntity<CategoryResponse> getCategories() {
-       CategoryResponse categoryResponse =categoryService.getAllCategories();
+    public ResponseEntity<CategoryResponse> getCategories(
+            @RequestParam(name="pageNumber" , defaultValue = AppConstant.pageNumber, required = false) Integer pageNumber,
+            @RequestParam(name="pageSize",  defaultValue = AppConstant.pageSize, required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstant.sort_Category_By, required = false) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstant.Sort_DIR, required = false) String sortOrder
+    ) {
+       CategoryResponse categoryResponse =categoryService.getAllCategories(pageNumber,pageSize,sortBy,sortOrder);
        return new ResponseEntity<>(categoryResponse,HttpStatus.OK);
     }
 
