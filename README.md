@@ -1,4 +1,4 @@
-# 🛒 Full Stack E-Commerce Application
+Full Stack E-Commerce Application
 
 A complete Full Stack E-Commerce Application built using modern backend technologies and enterprise development concepts. This project is being developed step-by-step while covering real-world software engineering practices, scalable architecture, security, and performance optimization.
 
