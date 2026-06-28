@@ -17,11 +17,6 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/echo")
-    public ResponseEntity<String> echo(@RequestParam(name = "message", required = false) String message){
-        return new ResponseEntity<>("message : " + message, HttpStatus.OK);
-    }
-
     @GetMapping("/public/categories")
     public ResponseEntity<CategoryResponse> getCategories(
             @RequestParam(name="pageNumber" , defaultValue = AppConstant.pageNumber, required = false) Integer pageNumber,
