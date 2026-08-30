@@ -28,7 +28,7 @@ public class CategoryController {
        return new ResponseEntity<>(categoryResponse,HttpStatus.OK);
     }
 
-    @PostMapping("/public/categories")
+    @PostMapping("/admin/categories")
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         CategoryDTO categoryDTOToReturn=categoryService.createCategory(categoryDTO);
         return new ResponseEntity<>(categoryDTOToReturn,HttpStatus.CREATED);
