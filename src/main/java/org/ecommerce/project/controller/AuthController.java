@@ -12,7 +12,9 @@ import org.ecommerce.project.model.User;
 import org.ecommerce.project.repository.RoleRepository;
 import org.ecommerce.project.repository.UserRepository;
 import org.ecommerce.project.security.security_services.UserDetailsImp;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,10 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,8 +73,12 @@ public class AuthController {
 
             System.out.println("5️⃣ User: " + userDetails.getUsername());
 
-            String jwtToken =
-                    jwtUtils.generateTokenFromUsername(userDetails);
+//            String jwtToken =
+//                    jwtUtils.generateTokenFromUsername(userDetails);
+
+            //jtwToken to cookie
+            ResponseCookie jwtCookie =
+                    jwtUtils.generateJwtCookie(userDetails);
 
             System.out.println("6️⃣ JWT generated");
 
@@ -84,17 +87,30 @@ public class AuthController {
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
 
+//            UserInfoResponse response =
+//                    new UserInfoResponse(
+//                            userDetails.getId(),
+//                            userDetails.getUsername(),
+//                            roles,
+//                            jwtToken
+//                    );
+
+            //jtwToken to cookie
             UserInfoResponse response =
                     new UserInfoResponse(
                             userDetails.getId(),
                             userDetails.getUsername(),
-                            roles,
-                            jwtToken
+                            roles
                     );
 
             System.out.println("7️⃣ Returning response");
 
-            return ResponseEntity.ok(response);
+//            return ResponseEntity.ok(response);
+
+            //for cookie
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
+                    jwtCookie.toString())
+                    .body(response);
 
         } catch (Exception e) {
 
@@ -151,5 +167,41 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @GetMapping("/username")
+    public String getCurrentUser(Authentication authentication){
+        if(authentication == null){
+            return "NULL";
+        }
+        return authentication.getName();
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?>getUserDetails(Authentication authentication){
+        UserDetailsImp userDetails =
+                (UserDetailsImp) authentication.getPrincipal();
+
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        UserInfoResponse response =
+                new UserInfoResponse(
+                        userDetails.getId(),
+                        userDetails.getUsername(),
+                        roles
+                );
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<?> logout(){
+        ResponseCookie jwtCookie =
+                jwtUtils.getCleanJwtCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
+                        jwtCookie.toString())
+                .body(new MessageResponse("User logged out successfully!"));
     }
 }

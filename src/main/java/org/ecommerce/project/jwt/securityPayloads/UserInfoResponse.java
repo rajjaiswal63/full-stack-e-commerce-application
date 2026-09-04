@@ -16,6 +16,12 @@ public class UserInfoResponse {
         this.roles = roles;
         this.jwtToken = jwtToken;
     }
+    //for jtw cookie
+    public UserInfoResponse(Long id, String username, List<String> roles) {
+        this.id = id;
+        this.username = username;
+        this.roles = roles;
+    }
 
     public Long getId() {
         return id;
