@@ -49,12 +49,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
-        System.out.println("1️⃣ SIGNIN HIT");
-
         try {
-
-            System.out.println("2️⃣ Username: " + loginRequest.getUsername());
-            System.out.println("3️⃣ Before authenticate");
 
             Authentication authentication =
                     authenticationManager.authenticate(
@@ -64,14 +59,12 @@ public class AuthController {
                             )
                     );
 
-            System.out.println("4️⃣ Authentication successful");
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             UserDetailsImp userDetails =
                     (UserDetailsImp) authentication.getPrincipal();
 
-            System.out.println("5️⃣ User: " + userDetails.getUsername());
 
 //            String jwtToken =
 //                    jwtUtils.generateTokenFromUsername(userDetails);
