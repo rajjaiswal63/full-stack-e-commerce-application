@@ -1,0 +1,21 @@
+package org.ecommerce.project.payload;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderRequestDTO {
+    @NotNull
+    private Long addressId;
+    private String paymentMethod;
+    private String pgName;
+    private String pgPaymentId;
+    private String pgOrderId;
+    private String pgSignature;
+    private String pgStatus;
+    private String pgResponseMessage;
+}

@@ -1,16 +1,16 @@
 package org.ecommerce.project.payload;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CategoryResponse {
-    private List<CategoryDTO> categoriesList;
+    private List<CategoryDTO> content;
     private Integer pageNumber;
     private Integer pageSize;
     private Long totalElements;

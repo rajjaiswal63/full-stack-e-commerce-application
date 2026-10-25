@@ -15,39 +15,38 @@ import lombok.NoArgsConstructor;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id")
+    private Long addressId;
 
     @NotBlank
-    @Size(min = 5, message = "Street name must be atleast 5 characters")
+    @Size(min = 5)
     private String street;
 
     @NotBlank
-    @Size(min = 5, message = "Building name must be atleast 5 characters")
+    @Size(min = 5)
     private String buildingName;
 
     @NotBlank
-    @Size(min = 4, message = "City name must be atleast 4 characters")
+    @Size(min = 4)
     private String city;
 
     @NotBlank
-    @Size(min = 2, message = "State name must be atleast 2 characters")
+    @Size(min = 2)
     private String state;
 
     @NotBlank
-    @Size(min = 2, message = "Country name must be atleast 2 characters")
+    @Size(min = 2)
     private String country;
 
     @NotBlank
-    @Size(min = 5, message = "Pincode must be atleast 5 characters")
+    @Size(min = 5)
     private String pincode;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Address(String street, String buildingName, String city,
-                   String state, String country,
-                   String pincode) {
+    public Address(String street, String buildingName, String city, String state, String country, String pincode) {
         this.street = street;
         this.buildingName = buildingName;
         this.city = city;

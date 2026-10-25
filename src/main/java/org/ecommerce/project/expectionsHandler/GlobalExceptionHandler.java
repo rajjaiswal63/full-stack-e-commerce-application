@@ -1,16 +1,18 @@
 package org.ecommerce.project.expectionsHandler;
 
-import org.ecommerce.project.payload.ApiResponse;
+import org.ecommerce.project.payload.APIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.context.annotation.Profile;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Profile("legacy")
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -25,23 +27,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse> ResourceNotFoundException(ResourceNotFoundException e){
+    public ResponseEntity<APIResponse> ResourceNotFoundException(ResourceNotFoundException e){
         String message=e.getMessage();
-        ApiResponse apiResponse = new ApiResponse(message,false);
+        APIResponse apiResponse = new APIResponse(message,false);
         return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(APIException.class)
-    public ResponseEntity<ApiResponse> APIException(APIException e){
+    public ResponseEntity<APIResponse> APIException(APIException e){
         String message= e.getMessage();
-        ApiResponse apiResponse = new ApiResponse(message,false);
+        APIResponse apiResponse = new APIResponse(message,false);
         return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoCategoryPresentExceptio.class)
-    public ResponseEntity<ApiResponse> NoCategoryPresentExceptio(NoCategoryPresentExceptio e){
+    public ResponseEntity<APIResponse> NoCategoryPresentExceptio(NoCategoryPresentExceptio e){
         String message= e.getMessage();
-        ApiResponse apiResponse = new ApiResponse(message,false);
+        APIResponse apiResponse = new APIResponse(message,false);
         return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
 }
