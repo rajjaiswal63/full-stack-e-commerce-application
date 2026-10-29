@@ -60,9 +60,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     OrderItemRepository orderItemRepository;
 
-    @Value("${project.image}")
-    private String path;
-
     @Value("${image.base.url}")
     private String imageBaseUrl;
 
@@ -312,7 +309,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
 
         assertCanManage(productFromDb);
-        String fileName = fileService.uploadImage(path, image);
+        String fileName = fileService.uploadImage(image);
         productFromDb.setImage(fileName);
 
         Product updatedProduct = productRepository.save(productFromDb);

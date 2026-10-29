@@ -171,3 +171,17 @@ The Razorpay callback is public only so the payment provider redirect can comple
 
 - [Frontend setup, routes and UI flow](https://github.com/rajjaiswal63/e-commerce-application-frontend)
 - [Primary backend repository](https://github.com/rajjaiswal63/full-stack-e-commerce-application)
+## Product images in Amazon S3
+
+Product image uploads are stored in a private S3 bucket under the configured image prefix. The backend serves them through /images/products/{fileName}, so the browser does not need direct access to S3 and the bucket can keep Block Public Access enabled. Existing images still on the server IMAGE_STORAGE_PATH are read as a fallback; new uploads are sent only to S3.
+
+Set these environment variables on the backend:
+
+| Variable | Purpose | Example |
+|---|---|---|
+| AWS_REGION | Region containing the bucket | ap-south-2 |
+| AWS_S3_BUCKET | S3 bucket name | my-ecommerce-product-images |
+| AWS_S3_IMAGE_PREFIX | Object key prefix | products |
+| IMAGE_BASE_URL | Backend image URL returned in product data | http://EC2_PUBLIC_HOST:8080/images/products |
+
+Attach an EC2 instance role with s3:PutObject and s3:GetObject permissions for arn:aws:s3:::YOUR_BUCKET_NAME/products/*. The AWS SDK default credentials provider uses the EC2 instance role automatically; do not put AWS access keys in application.properties. For local development, use an AWS profile or standard AWS credential environment variables. The bucket does not need public-read ACLs or a browser CORS policy because image requests go through the backend.
